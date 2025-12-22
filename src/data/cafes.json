@@ -1,0 +1,22 @@
+[
+    {
+        "id": "1",
+        "name": "Veranda Coffee Company",
+        "location": "Çanakkale/Merkez",
+        "photos": [
+            "/veranda1.jpeg",
+            "/veranda2.jpeg"
+        ],
+        "rating": 4.6
+    },
+    {
+        "id": "2",
+        "name": "Golden Horse",
+        "location": "Çanakkale/Merkez",
+        "photos": [
+            "/veranda1.jpeg",
+            "/veranda2.jpeg"
+        ],
+        "rating": 4.7
+    }
+]
