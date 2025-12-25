@@ -5,3 +5,6 @@ export function mapPlaceTypesToCategory(types: string[]): string {
     if (types.includes("meal_takeaway")) return "fastfood";
     return "other";
 }
+
+
+
