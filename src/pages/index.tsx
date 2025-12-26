@@ -61,7 +61,7 @@ export default function Home({ cafes, activeCategory }: Props) {
         ))}
       </div>
 
-      <div className="ml-2 flex flex- flex-wrap">
+      <div className="ml-2 flex  flex-wrap">
         {
           cafes.map((c) => (
             <CaffeCard key={c.id} cafe={c} />
@@ -75,45 +75,23 @@ export default function Home({ cafes, activeCategory }: Props) {
 }
 
 
-
 export async function getServerSideProps(context: any) {
-
-  console.log("ENV KEY:", process.env.GOOGLE_PLACES_KEY);
   const category = context.query.category || null;
 
   const res = await fetch(
-    `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=40.1553,26.4142&radius=1500&type=cafe&key=${process.env.GOOGLE_PLACES_KEY}`
+    " https://cafes-sync.mhunver.workers.dev",
+    { cache: "no-store" }
   );
 
-  const data = await res.json();
+  const cafes = await res.json();
 
-  // console.log("geliyormu")
-  // console.log(data)
-
-
-  const results = data.results || [];
-
-  let cafes = results.map((place: any) => ({
-    id: place.place_id,
-    name: place.name,
-    location: place.vicinity,
-    rating: Math.floor(place.rating || 0),
-    photos: place.photos
-      ? place.photos.map(
-        (p: any) =>
-          `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${p.photo_reference}&key=${process.env.GOOGLE_PLACES_KEY}`
-      )
-      : [],
-    category: place.types?.includes("cafe") ? "coffee" : "other",
-  }));
-
-  if (category) {
-    cafes = cafes.filter((c) => c.category === category);
-  }
+  const filtered = category
+    ? cafes.filter((c: any) => c.types?.includes("cafe"))
+    : cafes;
 
   return {
     props: {
-      cafes,
+      cafes: filtered,
       activeCategory: category,
     },
   };
