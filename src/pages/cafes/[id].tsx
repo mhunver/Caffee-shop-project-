@@ -1,3 +1,4 @@
+export const runtime = 'edge';
 import { useRouter } from "next/router";
 import Image from "next/image";
 
