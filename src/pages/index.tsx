@@ -126,7 +126,7 @@ export async function getServerSideProps(context: any) {
   const category = context.query.category || null;
 
   const res = await fetch(
-    " https://cafes-sync.mhunver.workers.dev",
+    "https://cafes-sync.mhunver.workers.dev",
     { cache: "no-store" }
   );
 
