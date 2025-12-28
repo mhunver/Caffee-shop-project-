@@ -124,30 +124,31 @@ export default function Home({ cafes, activeCategory }: Props) {
 
 export async function getServerSideProps(context: any) {
   const category = context.query.category || null;
+  try {
+    const res = await fetch("https://cafes-sync.mhunver.workers.dev", {
+      cache: "no-store",
+      signal: AbortSignal.timeout(5000) // 5 saniye sonra vazgeç
+    });
 
-  const res = await fetch(
-    "https://cafes-sync.mhunver.workers.dev",
-    { cache: "no-store" }
-  );
+    if (!res.ok) throw new Error("Worker yanıt vermedi");
 
-  const cafes = await res.json();
+    const cafes = await res.json();
+    let filtered = cafes;
 
-  let filtered = cafes;
+    if (category && mapPlaceCategory[category]) {
+      const allowedTypes = mapPlaceCategory[category];
 
-  if (category && mapPlaceCategory[category]) {
-    const allowedTypes = mapPlaceCategory[category];
+      filtered = cafes.filter((c: any) =>
+        c.types?.some((t: string) => allowedTypes.includes(t))
+      );
+    }
 
-    filtered = cafes.filter((c: any) =>
-      c.types?.some((t: string) => allowedTypes.includes(t))
-    );
+    return { props: { cafes: filtered, activeCategory: category } };
+  } catch (error) {
+    console.error("Fetch Hatası:", error);
+    return { props: { cafes: [], activeCategory: category } }; // Hata olsa da site açılsın
   }
 
-  return {
-    props: {
-      cafes: filtered,
-      activeCategory: category,
-    },
-  };
 }
 
 
