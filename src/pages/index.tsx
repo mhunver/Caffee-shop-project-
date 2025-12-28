@@ -1,5 +1,3 @@
-export const runtime = 'experimental-edge';
-
 import CaffeCard from "../components/CaffeCard";
 
 import { useState } from "react";
@@ -137,7 +135,7 @@ export async function getServerSideProps(context: any) {
   try {
 
     const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), 5000); // 5 saniye sınırı
+    const id = setTimeout(() => controller.abort(), 5000);
 
     const res = await fetch("https://cafes-sync.mhunver.workers.dev", {
       signal: controller.signal,

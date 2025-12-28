@@ -1,4 +1,3 @@
-export const runtime = 'experimental-edge';
 import { useRouter } from "next/router";
 import Image from "next/image";
 
@@ -54,11 +53,7 @@ export default function CafeDetail({ cafe }: CafeDetailProps) {
                 }
                 return res.json();
             })
-            .then(data => {
-
-                setDetails(data);
-                // console.log(data);
-            })
+            .then(data => setDetails(data as any))
             .catch(err => {
                 //console.error("DETAIL FETCH ERROR:", err);
             });
@@ -252,6 +247,7 @@ export default function CafeDetail({ cafe }: CafeDetailProps) {
 }
 
 export async function getServerSideProps(context: any) {
+
     const { id } = context.params;
 
     const res = await fetch(
@@ -259,7 +255,7 @@ export async function getServerSideProps(context: any) {
         { cache: "no-store" }
     );
 
-    const cafes = await res.json();
+    const cafes = (await res.json() as Cafe[]);
 
     const cafe = cafes.find((c: any) => c.id === id) || null;
 
