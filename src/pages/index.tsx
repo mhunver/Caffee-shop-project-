@@ -124,31 +124,49 @@ export default function Home({ cafes, activeCategory }: Props) {
 
 export async function getServerSideProps(context: any) {
   const category = context.query.category || null;
-  try {
-    const res = await fetch("https://cafes-sync.mhunver.workers.dev", {
-      cache: "no-store",
-      signal: AbortSignal.timeout(5000) // 5 saniye sonra vazgeç
-    });
 
-    if (!res.ok) throw new Error("Worker yanıt vermedi");
+  try {
+
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), 5000); // 5 saniye sınırı
+
+    const res = await fetch("https://cafes-sync.mhunver.workers.dev", {
+      signal: controller.signal,
+      headers: {
+        "Accept": "application/json"
+      }
+    });
+    clearTimeout(id);
+
+    if (!res.ok) throw new Error("Worker'a ulaşılamadı");
 
     const cafes = await res.json();
-    let filtered = cafes;
+    let filtered = Array.isArray(cafes) ? cafes : [];
 
+    // Kategori filtreleme mantığın
     if (category && mapPlaceCategory[category]) {
       const allowedTypes = mapPlaceCategory[category];
-
-      filtered = cafes.filter((c: any) =>
+      filtered = filtered.filter((c: any) =>
         c.types?.some((t: string) => allowedTypes.includes(t))
       );
     }
 
-    return { props: { cafes: filtered, activeCategory: category } };
+    return {
+      props: {
+        cafes: filtered,
+        activeCategory: category,
+      },
+    };
   } catch (error) {
-    console.error("Fetch Hatası:", error);
-    return { props: { cafes: [], activeCategory: category } }; // Hata olsa da site açılsın
-  }
+    console.error("SSR Hatası:", error);
 
+    return {
+      props: {
+        cafes: [],
+        activeCategory: category,
+      },
+    };
+  }
 }
 
 
