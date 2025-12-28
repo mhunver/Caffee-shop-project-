@@ -39,6 +39,15 @@ export default function Home({ cafes, activeCategory }: Props) {
   // console.log("index.tsx cafes ")
   // console.log(cafes)
 
+  if (!cafes || cafes.length === 0) {
+    return (
+      <div className="text-center mt-10">
+        <h1 className="text-rose-800 text-xl">Kafeler Yükleniyor...</h1>
+        <p>Lütfen bir kez senkronize edin veya internetinizi kontrol edin.</p>
+      </div>
+    );
+  }
+
   const [open, setOpen] = useState<any>(false);
 
   const categories = ["coffee", "dessert", "restaurant", "fastfood"];
