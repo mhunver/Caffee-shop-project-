@@ -7,12 +7,15 @@ import next from "next";
 
 const Card = ({ cafe }) => {
 
+    console.log("cafe")
+    console.log(cafe)
+
     const stars = [1, 2, 3, 4, 5];
 
 
 
     return (
-        <Link href={(`cafes/${cafe?.id}`)}>
+        <Link href={(`/cafes/${cafe?.id}`)}>
             <div className="h-85 w-100 flex-column border rounded-lg p-4 m-5 cursor-pointer">
 
                 <div>
