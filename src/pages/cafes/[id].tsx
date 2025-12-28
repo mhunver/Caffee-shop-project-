@@ -5,8 +5,41 @@ import { StarIcon, HomeIcon, PhoneIcon } from "@heroicons/react/20/solid";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
-export default function CafeDetail({ cafe }) {
-    const [details, setDetails] = useState<any>(null);
+type Cafe = {
+    id: string;
+    name: string;
+    location: string;
+    rating: number;
+    photos: string[];
+    types?: string[];
+    open_now?: boolean;
+    formatted_address?: string;
+};
+
+type CafeDetailProps = {
+    cafe: Cafe;
+};
+
+type Review = {
+    author_name: string;
+    rating: number;
+    text?: string;
+    profile_photo_url: string;
+    relative_time_description: string;
+};
+
+type CafeDetails = {
+    formatted_phone_number?: string;
+    url?: string;
+    reviews?: Review[];
+    opening_hours?: {
+        weekday_text: string[];
+    };
+};
+
+
+export default function CafeDetail({ cafe }: CafeDetailProps) {
+    const [details, setDetails] = useState<CafeDetails | null>(null);
     const router = useRouter();
     const { id } = router.query;
 

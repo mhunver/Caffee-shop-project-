@@ -3,12 +3,25 @@ import { StarIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import next from "next";
 
+type Cafe = {
+    id: string;
+    name: string;
+    location: string;
+    rating: number;
+    photos: string[];
+    types?: string[];
+    open_now?: boolean;
+};
+
+type CardProps = {
+    cafe: Cafe;
+};
 
 
-const Card = ({ cafe }) => {
+const Card = ({ cafe }: CardProps) => {
 
-    console.log("cafe")
-    console.log(cafe)
+    // console.log("cafe")
+    // console.log(cafe)
 
     const stars = [1, 2, 3, 4, 5];
 
